@@ -1,0 +1,41 @@
+From bf6acbfe1941b178c2779387bd6807689b43e7f0 Mon Sep 17 00:00:00 2001
+From: Luiz Augusto von Dentz <luiz.dentz@openbossa.org>
+Date: Thu, 19 Nov 2009 10:50:39 -0300
+Subject: [PATCH] Fix D-Bus error handling on synce connect
+
+---
+ plugins/syncevolution.c |   11 +++++++++--
+ 1 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/syncevolution.c b/plugins/syncevolution.c
+index da4ce0a..f0fc5ef 100644
+--- a/plugins/syncevolution.c
++++ b/plugins/syncevolution.c
+@@ -215,6 +215,7 @@ static void connect_cb(DBusPendingCall *call, void *user_data)
+ 	struct synce_context *context;
+ 	DBusConnection *conn;
+ 	DBusMessage *reply;
++	DBusError err;
+ 	gchar *path;
+ 	obex_headerdata_t hd;
+ 
+@@ -228,8 +229,14 @@ static void connect_cb(DBusPendingCall *call, void *user_data)
+ 
+ 	reply = dbus_pending_call_steal_reply(call);
+ 
+-	dbus_message_get_args(reply, NULL, DBUS_TYPE_OBJECT_PATH, &path,
+-						DBUS_TYPE_INVALID);
++	dbus_error_init(&err);
++	if (dbus_message_get_args(reply, &err, DBUS_TYPE_OBJECT_PATH, &path,
++						DBUS_TYPE_INVALID) == FALSE) {
++		error("%s", err.message);
++		dbus_error_free(&err);
++		goto failed;
++	}
++
+ 	debug("Got conn object %s from syncevolution", path);
+ 	context->conn_obj = g_strdup(path);
+ 
+-- 
+1.6.5.1
+
