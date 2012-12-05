@@ -1,11 +1,11 @@
 Summary:	D-Bus service for Obex Client access
 Name:		obexd
-Version:	0.47
+Version:	0.48
 Release:	1
 License:	GPL v2+
 Group:		Applications
 Source0:	http://www.kernel.org/pub/linux/bluetooth/%{name}-%{version}.tar.gz
-# Source0-md5:	851f4d74e6824f3928168375dc3ad427
+# Source0-md5:	d03cf9bad2983243837f4f6d76ef14a6
 URL:		http://www.bluez.org/
 BuildRequires:	bluez-libs-devel
 BuildRequires:	dbus-devel
