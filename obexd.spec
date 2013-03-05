@@ -1,16 +1,16 @@
 Summary:	D-Bus service for Obex Client access
 Name:		obexd
-Version:	0.48
+Version:	0.46
 Release:	1
 License:	GPL v2+
 Group:		Applications
 Source0:	http://www.kernel.org/pub/linux/bluetooth/%{name}-%{version}.tar.gz
-# Source0-md5:	d03cf9bad2983243837f4f6d76ef14a6
+# Source0-md5:	54fa544e208830fecce8ef6f3c190cb3
 URL:		http://www.bluez.org/
-BuildRequires:	bluez-libs-devel
+BuildRequires:	bluez4-devel
 BuildRequires:	dbus-devel
 BuildRequires:	libical-devel
-Requires:	bluez
+Requires:	bluez4
 Requires:	dbus
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -24,6 +24,7 @@ D-Bus service for Obex Client access
 
 %build
 %configure \
+	--disable-server	\
 	--disable-silent-rules
 %{__make}
 
@@ -41,7 +42,5 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS ChangeLog NEWS README
 %dir %{_libexecdir}
 %attr(755,root,root) %{_libexecdir}/obex-client
-%attr(755,root,root) %{_libexecdir}/obexd
 %{_datadir}/dbus-1/services/obex-client.service
-%{_datadir}/dbus-1/services/obexd.service
 
